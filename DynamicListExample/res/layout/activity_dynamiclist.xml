@@ -11,7 +11,8 @@
     <net.dynamicandroid.listview.DynamicListView
         android:id="@+id/dynamiclist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:entries="@array/sample_kor" />
 
     <include
         android:layout_width="match_parent"

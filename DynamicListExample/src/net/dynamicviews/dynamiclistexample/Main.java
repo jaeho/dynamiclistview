@@ -17,9 +17,7 @@ public class Main extends ListActivity {
 			"PullToRefreshSectionList",
 			"FixedHeaderSectionDynamicList",
 			"ScrollBackgroundSectionDynamicList",
-			"PinSelectionDynamicList",
 			"ScrollView",
-			"SortableList"
 	};
 
 	@Override

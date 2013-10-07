@@ -35,7 +35,7 @@ public class PullToRefreshSectionListExample extends Activity {
 		listView.setAdapter(SectionDynamicListExample.getSampleSectionAdapter(this));
 		
 		dynamicListLayout = (DynamicListLayout) findViewById(R.id.dynamiclistlayout);
-		final ImageView arrow = (ImageView) findViewById(R.id.view_pulltorefresh_header_arrow);
+		final ImageView arrow = (ImageView) findViewById(R.id.view_pulltorefresh_header_arrow);	
 		final TextView msg = (TextView) findViewById(R.id.view_pulltorefresh_header_tv);
 		progress = (ProgressBar) findViewById(R.id.view_pulltorefresh_header_progress);
 		headerBody = findViewById(R.id.view_pulltorefresh_header_body);
