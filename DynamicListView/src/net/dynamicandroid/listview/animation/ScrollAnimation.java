@@ -19,9 +19,6 @@ package net.dynamicandroid.listview.animation;
 import android.os.AsyncTask;
 
 
-/**
- * @author jaehochoe
- */
 public class ScrollAnimation extends AsyncTask<ScrollAnimationItem, Void, Void> {
 	ScrollAnimationItem mItem = null;
 	boolean end = false;
