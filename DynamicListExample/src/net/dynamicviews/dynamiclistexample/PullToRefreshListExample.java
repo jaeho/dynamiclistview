@@ -1,12 +1,12 @@
 package net.dynamicviews.dynamiclistexample;
 
 import net.dynamicandroid.listview.DynamicListLayout;
-import net.dynamicandroid.listview.DynamicListLayout.DynamicListViewListener;
 import net.dynamicandroid.listview.DynamicListLayout.PullingMode;
 import net.dynamicandroid.listview.DynamicListLayout.PullingStatus;
 import net.dynamicandroid.listview.DynamicListLayout.ScrollDirection;
 import net.dynamicandroid.listview.animation.DynamicListAnimationUtils;
 import net.dynamicandroid.listview.interfaces.DynamicListLayoutChild;
+import net.dynamicandroid.listview.interfaces.Listener;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,7 +34,7 @@ public class PullToRefreshListExample extends Activity {
 		progress = (ProgressBar) findViewById(R.id.view_pulltorefresh_header_progress);
 		headerBody = findViewById(R.id.view_pulltorefresh_header_body);
 
-		dynamicListLayout.setDynamicListViewListener(new DynamicListViewListener() {
+		dynamicListLayout.setListener(new Listener() {
 
 			@Override
 			public void onRelease(DynamicListLayout layout, DynamicListLayoutChild baseDynamicListView, PullingMode pulling, PullingStatus pullingStatus) {
