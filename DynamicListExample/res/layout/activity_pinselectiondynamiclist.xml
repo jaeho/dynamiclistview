@@ -1,0 +1,21 @@
+<net.dynamicandroid.listview.DynamicListLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:clipChildren="false">
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        layout="@layout/view_header" />
+
+    <net.dynamicandroid.listview.DynamicDragSelectionListView
+        android:id="@+id/pin_selection_dynamiclist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        layout="@layout/view_footer" />
+
+</net.dynamicandroid.listview.DynamicListLayout>

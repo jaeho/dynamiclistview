@@ -1,3 +1,19 @@
+/*
+ * Copyright 2013 Jaeho Choe
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package net.dynamicandroid.listview;
 
 import java.util.ArrayList;
@@ -8,7 +24,7 @@ import net.dynamicandroid.listview.animation.ScrollAnimation;
 import net.dynamicandroid.listview.animation.ScrollAnimationItem;
 import net.dynamicandroid.listview.animation.ScrollAnimationListener;
 import net.dynamicandroid.listview.interfaces.DynamicListLayoutChild;
-import net.dynamicandroid.listview.sortable.DynamicSortableListView;
+import net.dynamicandroid.listview.interfaces.Listener;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -20,7 +36,6 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -68,7 +83,7 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 	private View mFooter = null;
 	private int mHeaderHeight = -1;
 	private int mFooterHeight = -1;
-	private DynamicListViewListener mDynamicListViewListener;
+	private Listener mDynamicListViewListener;
 	boolean mCompletelyClosed = true;
 	boolean mNeedFirstTouch = true;
 
@@ -87,7 +102,6 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 	private boolean mPullingOnTouchMove = false;
 	ScrollAnimation mPullingAnimationForClose;
 	boolean mPullingIsNowClosing = false;
-	private boolean isClosed = true;
 
 	private int mDefaultHeaderHeight = DEFAULT_HEIGHT;
 	private int mDefaultFooterHeight = DEFAULT_HEIGHT;
@@ -98,6 +112,9 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 	DynamicScrollWatcher mScrollWatcher = new DynamicScrollWatcher();
 
 	private AttributeSet mAttrs = null;
+	private DynamicListScrollDependencyViewItem reservedDependencyItem;
+	public boolean mIsFirstPulling = false;
+	
 	public DynamicListLayout(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		this.mAttrs = attrs;
@@ -114,13 +131,9 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		super(context);
 	}
 
-	void readAttributes() {
+	private void readAttributes() {
 		if(mAttrs==null)
 			return;
-	}
-
-	public DynamicListLayoutChild getDynamicListView() {
-		return mDynamicListView;
 	}
 
 	@Override
@@ -130,7 +143,7 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	}
 
-	void init() {
+	private void init() {
 		gesture = new GestureDetector(getContext(), new OnGestureListener() {
 			@Override
 			public boolean onSingleTapUp(MotionEvent e) {
@@ -182,7 +195,7 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		setTouchListenerToDynamicListView();
 	}
 
-	void addDynamicListView(DynamicListLayoutChild dynamicListView) {
+	private void addDynamicListView(DynamicListLayoutChild dynamicListView) {
 		this.mDynamicListView = dynamicListView;
 		mDynamicListView.setOnOverScrollListener(new OnOverScrollListener() {
 			@Override
@@ -196,15 +209,15 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		addView(mListFrame);
 	}
 
-	void addDynamicHeaderView(View view) {
+	private void addDynamicHeaderView(View view) {
 		this.mHeader = view;
 	}
 
-	void addDynamicFooterView(View view) {
+	private void addDynamicFooterView(View view) {
 		this.mFooter = view;
 	}
 
-	void checkHeaderAndFooter() {
+	private void checkHeaderAndFooter() {
 		if (mHeader != null && mHeaderFrame == null) {
 			if (this.mHeaderHeight == -1) {
 				if (mHeader.getLayoutParams().height == LayoutParams.MATCH_PARENT
@@ -253,9 +266,7 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		initialized = true;
 	}
 
-	private DynamicListScrollDependencyViewItem reservedDependencyItem;
-
-	public void setDependencyView(View view, int gapX, int gapY, int gravity) {
+	private void setDependencyView(View view, int gapX, int gapY, int gravity) {
 		reservedDependencyItem = new DynamicListScrollDependencyViewItem(view, gapX, gapY, gravity);
 	}
 
@@ -264,25 +275,12 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		setDependencyView(view, 0, gapY, gravity);
 	}
 
-	public void setTopBackgroundView(View view, int gapY) {
-		setTopBackgroundViewScrollable(view, gapY, 2);
-	}
-
-	void setTouchListenerToDynamicListView() {
+	private void setTouchListenerToDynamicListView() {
 		if (mDynamicListView != null)
 			mDynamicListView.setOnTouchListener(this);
 	}
 
-	public void setmDynamicListView(DynamicListView dynamicListView) throws Exception {
-		if (this.mDynamicListView != null) {
-			return;
-		}
-
-		addDynamicListView(dynamicListView);
-		setTouchListenerToDynamicListView();
-	}
-
-	void checkPullingState(int scrollY) {
+	private void checkPullingState(int scrollY) {
 
 		if (mIsNowPullingDown) {
 			if (mPullingState == PullingStatus.OFF && -scrollY > mHeaderHeight + mSensitivity) {
@@ -421,11 +419,7 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 
 	}
 
-	public boolean isClosed() {
-		return mListFrame.getScrollY() == 0;
-	}
-
-	void finishedClosed(final boolean completelyClosed) {
+	private void finishedClosed(final boolean completelyClosed) {
 		if (mDynamicListViewListener != null)
 			mDynamicListViewListener.onCloesed(this, mDynamicListView, mIsNowPullingDown ? PullingMode.TOP : PullingMode.BOTTOM,
 					completelyClosed);
@@ -433,7 +427,7 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		initializeData();
 	}
 
-	void initializeData() {
+	private void initializeData() {
 		mPullingAnimationForClose = null;
 		mPullingIsNowClosing = false;
 
@@ -446,11 +440,14 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 			mDynamicListViewListener.onPullingStatusChanged(this, mDynamicListView, PullingStatus.END, null);
 	}
 
-	boolean isAvailableStatus() {
-		if (mDynamicListView instanceof DynamicDragSelectionListView) {
-			return !((DynamicDragSelectionListView) mDynamicListView).isDragMode();
-		}
-
+	/**
+	 * You can use this method when the situation what should not use pulling.
+	 * @return default : true
+	 */
+	private boolean isAvailableStatus() {
+//		if (mDynamicListView instanceof DynamicDragSelectionListView) {
+//			return !((DynamicDragSelectionListView) mDynamicListView).isDragMode();
+//		}
 		return true;
 	}
 
@@ -458,7 +455,7 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		private ScrollDirection scrollDirection = null;
 		private float savedY = 0;
 
-		public void setEvent(MotionEvent event, DynamicListViewListener listener) {
+		public void setEvent(MotionEvent event, Listener listener) {
 			float y = event.getY();
 
 			if (savedY == 0)
@@ -484,7 +481,8 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent event) {
 		/**
-		 * ADDED BY jangc. cancle touch-event on start pulling.
+		 * ADDED BY jangc. 
+		 * Cancel touch-event on start pulling.
 		 */
 		if (mIsNowPullingDown || mIsNowPullingUp) {
 			boolean isFirstPulling = mIsFirstPulling;
@@ -503,8 +501,6 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 
 		return super.dispatchTouchEvent(event);
 	}
-
-	public boolean mIsFirstPulling = false;
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
@@ -541,10 +537,6 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 
 			if (mDynamicListView.reachedListTop() && (mPullingTouchYPosition - (int) event.getRawY() < 0)
 					&& Math.abs(mPullingTouchYPosition - (int) event.getRawY()) > mMinPullingLength) {
-				if(mDynamicListView instanceof DynamicSortableListView)
-					if(((DynamicSortableListView) mDynamicListView).isDragging())
-						return false;
-				
 				mIsNowPullingUp = false;
 				mIsNowPullingDown = true;
 				firstTouch(event);
@@ -552,10 +544,6 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 				mIsFirstPulling = true;
 			} else if (mDynamicListView.reachedListBottom() && (mPullingTouchYPosition - (int) event.getRawY() > 0)
 					&& Math.abs(mPullingTouchYPosition - (int) event.getRawY()) > mMinPullingLength) {
-				if(mDynamicListView instanceof DynamicSortableListView)
-					if(((DynamicSortableListView) mDynamicListView).isDragging())
-						return false;
-				
 				mIsNowPullingDown = false;
 				mIsNowPullingUp = true;
 				firstTouch(event);
@@ -591,7 +579,7 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		return false;
 	}
 
-	void firstTouch(MotionEvent event) {
+	private void firstTouch(MotionEvent event) {
 		mNeedFirstTouch = false;
 		if (mDynamicListView.reachedListTop() || mDynamicListView.reachedListBottom()) {
 			if (mPullingAnimationForClose != null) {
@@ -604,17 +592,17 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		}
 	}
 
-	void showHeader() {
+	private void showHeader() {
 		if (mHeaderFrame != null && mHeaderFrame.getVisibility() != View.VISIBLE)
 			mHeaderFrame.setVisibility(View.VISIBLE);
 	}
 
-	void showFooter() {
+	private void showFooter() {
 		if (mFooterFrame != null && mFooterFrame.getVisibility() != View.VISIBLE)
 			mFooterFrame.setVisibility(View.VISIBLE);
 	}
 
-	void pull(MotionEvent event) {
+	private void pull(MotionEvent event) {
 		int divide = getPullRegistance(mListFrame);
 		int scrollY = 0;
 		if (mIsNowPullingDown) {
@@ -646,18 +634,18 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 	/**
 	 * ADDED BY jangc
 	 */
-	void throwActionDownEventToListView(MotionEvent event) {
+	private void throwActionDownEventToListView(MotionEvent event) {
 		int action = event.getAction();
 		event.setAction(MotionEvent.ACTION_DOWN);
 		((View) mDynamicListView).onTouchEvent(event);
 		event.setAction(action);
 	}
 
-	int getPullRegistance(View view) {
+	private int getPullRegistance(View view) {
 		return mUseRegistance?getPullRegistance(view, mResistance.getValue()):1;
 	}
 
-	int getPullRegistance(View view, int multiple) {
+	private int getPullRegistance(View view, int multiple) {
 
 		int rule = 5;
 		int divide = 1;
@@ -677,22 +665,21 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		return divide;
 	}
 
-	public static interface DynamicListViewListener {
-		void onPullingStatusChanged(DynamicListLayout layout, DynamicListLayoutChild baseDynamicListView, PullingStatus status,
-				PullingMode pulling);
-
-		void onRelease(DynamicListLayout layout, DynamicListLayoutChild baseDynamicListView, PullingMode pulling, PullingStatus pullingStatus);
-
-		void onCloesed(DynamicListLayout layout, DynamicListLayoutChild baseDynamicListView, PullingMode pulling, boolean completelyClosed);
-
-		void onScrollDirectionChanged(DynamicListLayout layout, DynamicListLayoutChild baseDynamicListView, ScrollDirection scrollDirection);
+	/**
+	 * Check the list is closed.
+	 * @return  
+	 * true : list is closed /
+	 * false : list isn't closed.
+	 */
+	public boolean isClosed() {
+		return mListFrame.getScrollY() == 0;
 	}
-
-	public DynamicListViewListener getOnPullingList() {
+	
+	public Listener getListener() {
 		return mDynamicListViewListener;
 	}
 
-	public void setDynamicListViewListener(DynamicListViewListener dynamicListViewListener) {
+	public void setListener(Listener dynamicListViewListener) {
 		this.mDynamicListViewListener = dynamicListViewListener;
 	}
 
@@ -700,6 +687,10 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		return mSensitivity;
 	}
 
+	/**
+	 * This method is to set the sensitivity.
+	 * @param The higher the number, the lot must draw.
+	 */
 	public void setSensitivity(int mSensitivity) {
 		this.mSensitivity = mSensitivity;
 	}
@@ -708,6 +699,10 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		return mMinPullingLength;
 	}
 
+	/**
+	 * This method is to set the min-length for pulling.
+	 * @param The higher the number, the lot must draw.
+	 */
 	public void setMinPullingLength(int mMinPullingLength) {
 		this.mMinPullingLength = mMinPullingLength;
 	}
@@ -724,6 +719,10 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		return mLockPullingDown;
 	}
 
+	/**
+	 * Pulling-Function is used to avoid using.
+	 * @param lockPulling
+	 */
 	public void setLockPullingDown(boolean lockPulling) {
 		this.mLockPullingDown = lockPulling;
 	}
@@ -732,6 +731,10 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		return mBounceLength;
 	}
 
+	/**
+	 * Bounce to set the distance.
+	 * @param mBounceLength
+	 */
 	public void setBounceLength(int mBounceLength) {
 		this.mBounceLength = mBounceLength;
 	}
@@ -752,6 +755,9 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		this.mDefaultFooterHeight = mCustomFooterHeight;
 	}
 
+	/**
+	 * Scroll to the top of the list.
+	 */
 	public void scrollToTop() {
 		if (mDynamicListView == null)
 			return;
@@ -759,7 +765,7 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		scrollDistance = -1;
 
 		if (mDynamicListView instanceof AbsListView) {
-			((AbsListView) mDynamicListView).smoothScrollBy(-getScreenHeight(getContext()) * 10, 2000);
+			((AbsListView) mDynamicListView).smoothScrollBy(-Util.getScreenHeight(getContext()) * 10, 2000);
 			postDelayed(scrollListToTop, 800);
 		} else if (mDynamicListView instanceof ScrollView) {
 			((ScrollView) mDynamicListView).smoothScrollTo(0, 0);
@@ -783,13 +789,12 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		}
 	};
 
-	public static int getScreenHeight(Context context) {
-		WindowManager display = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-		return display.getDefaultDisplay().getHeight();
-	}
-
+	/**
+	 * This method uses the default listener.
+	 * @param layout
+	 */
 	public static void setSimpleListener(final DynamicListLayout layout) {
-		layout.setDynamicListViewListener(new DynamicListViewListener() {
+		layout.setListener(new Listener() {
 
 			@Override
 			public void onScrollDirectionChanged(DynamicListLayout layout, DynamicListLayoutChild baseDynamicListView,
@@ -830,5 +835,11 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 		this.mUseRegistance = mUseRegistance;
 	}
 	
+	public DynamicListLayoutChild getDynamicListView() {
+		return mDynamicListView;
+	}
 	
+	public void setTopBackgroundView(View view, int gapY) {
+		setTopBackgroundViewScrollable(view, gapY, 2);
+	}
 }
