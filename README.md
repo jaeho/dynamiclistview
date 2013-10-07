@@ -97,7 +97,7 @@ For making Custom ListView (or GridView, ScrollView), You should implements [Dyn
 	  public boolean reachedListTop();
 	  public boolean reachedListBottom();
 	  
-`setOnOverScrollListener"` and `setOnTouchListener"`, you do not need to be implemented. but You should implement `reachedListTop"` and `reachedListBottom"` 
+`setOnOverScrollListener` and `setOnTouchListener`, you do not need to be implemented. but You should implement `reachedListTop` and `reachedListBottom` 
 
 Use [Util](https://github.com/jaeho/dynamiclistview/blob/master/DynamicListView/src/net/dynamicandroid/listview/Util.java) like this.
 
