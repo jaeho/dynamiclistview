@@ -31,7 +31,8 @@ For using DynamicListView Functions, You should use [DynamicListLayout](https://
 
 ### ListView with Header and Footer
 
-    <net.dynamicandroid.listview.DynamicListLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <net.dynamicandroid.listview.DynamicListLayout 
+    	xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
@@ -54,39 +55,40 @@ For using DynamicListView Functions, You should use [DynamicListLayout](https://
 
 ### ScrollView with Header and Footer
 		
-	 <net.dynamicandroid.listview.DynamicListLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		    android:layout_width="match_parent"
-		    android:layout_height="match_parent"
-		    android:clipChildren="false" >
+	 <net.dynamicandroid.listview.DynamicListLayout 
+	 	xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:clipChildren="false" >
 		
-		    <include
-		        android:layout_width="match_parent"
-		        android:layout_height="100dp"
-		        layout="@layout/view_header" />
+	    <include
+	        android:layout_width="match_parent"
+	        android:layout_height="100dp"
+	        layout="@layout/view_header" />
+	
+	    <net.dynamicandroid.listview.DynamicScrollView
+	        android:id="@+id/scrollview"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent" >
+	
+	        <LinearLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:orientation="vertical" >
+	
+	            <View
+	                android:layout_width="wrap_content"
+	                android:layout_height="2048dp"
+	                android:text="Button" />
+	        </LinearLayout>
+	    </net.dynamicandroid.listview.DynamicScrollView>
+	
+	    <include
+	        android:layout_width="match_parent"
+	        android:layout_height="100dp"
+	        layout="@layout/view_footer" />
 		
-		    <net.dynamicandroid.listview.DynamicScrollView
-		        android:id="@+id/scrollview"
-		        android:layout_width="match_parent"
-		        android:layout_height="match_parent" >
-		
-		        <LinearLayout
-		            android:layout_width="match_parent"
-		            android:layout_height="match_parent"
-		            android:orientation="vertical" >
-		
-		            <View
-		                android:layout_width="wrap_content"
-		                android:layout_height="2048dp"
-		                android:text="Button" />
-		        </LinearLayout>
-		    </net.dynamicandroid.listview.DynamicScrollView>
-		
-		    <include
-		        android:layout_width="match_parent"
-		        android:layout_height="100dp"
-		        layout="@layout/view_footer" />
-		
-		</net.dynamicandroid.listview.DynamicListLayout>
+	</net.dynamicandroid.listview.DynamicListLayout>
 
 ### Making Custom ListView 
 
@@ -109,5 +111,29 @@ Use [Util](https://github.com/jaeho/dynamiclistview/blob/master/DynamicListView/
 		return Util.reachedListTop(this);
 	}
 
-If so, Your ListView(or GridView, ScrollView) and [DynamicListLayout](https://github.com/jaeho/dynamiclistview/blob/master/DynamicListView/src/net/dynamicandroid/listview/DynamicListLayout.java) will be works.
+If so, your ListView(or GridView, ScrollView) and [DynamicListLayout](https://github.com/jaeho/dynamiclistview/blob/master/DynamicListView/src/net/dynamicandroid/listview/DynamicListLayout.java) will be works.
 
+### Easy way to convert your "ListView" into "DynamicListView"
+
+Your ListView,
+
+    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:id="@+id/dynamiclist"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"/>
+
+This code can be easily changed to DynamicListView like this.
+
+    <net.dynamicandroid.listview.DynamicListLayout 
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <net.dynamicandroid.listview.DynamicListView
+            android:id="@+id/dynamiclist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </net.dynamicandroid.listview.DynamicListLayout>
+    
+    
