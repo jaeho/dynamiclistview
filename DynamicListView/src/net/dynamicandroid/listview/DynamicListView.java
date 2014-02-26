@@ -36,7 +36,7 @@ import android.widget.ListView;
  * @see {@link DynamicListLayout} , {@link OnOverScrollListener} 
  */
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-public class DynamicListView extends ListView implements OnScrollListener {
+public class DynamicListView extends ListView implements OnScrollListener, DynamicListLayoutChild {
 
 	@Deprecated
 	final int MIN_OVERSCROLL_LENGTH = 20;

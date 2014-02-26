@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<net.dynamicandroid.listview.DynamicListLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<net.dynamicandroid.listview.DynamicListLayout
+    android:id="@+id/root" 
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <include
+    <EditText
+        android:id="@+id/edittext"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/view_header" />
+        android:layout_height="50dp" />
 
     <net.dynamicandroid.listview.DynamicListView
         android:id="@+id/dynamiclist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:entries="@array/sample_kor" />
-
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/view_footer" />
 
 </net.dynamicandroid.listview.DynamicListLayout>
