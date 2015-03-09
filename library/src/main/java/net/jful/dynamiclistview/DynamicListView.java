@@ -19,7 +19,6 @@ package net.jful.dynamiclistview;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.util.AttributeSet;
@@ -37,7 +36,7 @@ import net.jful.dynamiclistview.interfaces.DynamicListLayoutChild;
  * @author jaehochoe
  * @see {@link DynamicListLayout} , {@link net.jful.dynamiclistview.DynamicListView.OnOverScrollListener}
  */
-@TargetApi(Build.VERSION_CODES.GINGERBREAD)
+@TargetApi(VERSION_CODES.GINGERBREAD)
 public class DynamicListView extends ListView implements OnScrollListener, DynamicListLayoutChild {
 
     @Deprecated

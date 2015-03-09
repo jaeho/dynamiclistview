@@ -20,7 +20,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.util.AttributeSet;
@@ -36,7 +35,7 @@ import net.jful.dynamiclistview.DynamicListView.OnOverScrollListener;
 import net.jful.dynamiclistview.interfaces.BaseSectionAdapter;
 import net.jful.dynamiclistview.interfaces.DynamicListLayoutChild;
 
-@TargetApi(Build.VERSION_CODES.GINGERBREAD)
+@TargetApi(VERSION_CODES.GINGERBREAD)
 public class DynamicSectionListView extends ExpandableListView implements OnScrollListener, DynamicListLayoutChild {
 
     static final int DEFAULT_HEIGHT = DynamicListLayout.DEFAULT_HEIGHT / 2;
