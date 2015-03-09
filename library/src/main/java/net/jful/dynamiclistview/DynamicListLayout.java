@@ -16,10 +16,11 @@
 
 package net.jful.dynamiclistview;
 
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -27,6 +28,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -34,9 +36,6 @@ import android.widget.ScrollView;
 
 import net.jful.dynamiclistview.DynamicListScrollDependencyView.DynamicListScrollDependencyViewItem;
 import net.jful.dynamiclistview.DynamicListView.OnOverScrollListener;
-import net.jful.dynamiclistview.animation.ScrollAnimation;
-import net.jful.dynamiclistview.animation.ScrollAnimationItem;
-import net.jful.dynamiclistview.animation.ScrollAnimationListener;
 import net.jful.dynamiclistview.interfaces.DynamicListLayoutChild;
 import net.jful.dynamiclistview.interfaces.Listener;
 
@@ -101,7 +100,6 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
     boolean mIsNowPullingUp = false;
     int mPullingTouchYPosition, mPullingScrollYPosition = 0;
     private boolean mPullingOnTouchMove = false;
-    ScrollAnimation mPullingAnimationForClose;
     boolean mPullingIsNowClosing = false;
 
     private int mDefaultHeaderHeight = DEFAULT_HEIGHT;
@@ -313,38 +311,53 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
             return;
 
         int bounceLength = 0;
-        int bounceTarget = 0;
 
         boolean isTop = scrollDistance < 0;
 
         if (isTop) {
             bounceLength = -overScrollY;
-            bounceTarget = overScrollY;
         } else {
             bounceLength = overScrollY;
-            bounceTarget = -overScrollY;
         }
 
-        ScrollAnimationItem item = new ScrollAnimationItem(mListFrame, bounceLength, bounceTarget, new ScrollAnimationListener() {
+        animate(mListFrame.getScrollY(), mListFrame.getScrollY()+bounceLength, new AnimatorListener() {
             @Override
-            public void onAnimationEnd() {
+            public void onAnimationStart(Animator animation) {
+            }
 
+            @Override
+            public void onAnimationEnd(Animator animation) {
                 if (!mPullingOnTouchMove) {
                     close();
                 }
             }
 
             @Override
-            public void onProgress() {
+            public void onAnimationCancel(Animator animation) {
 
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
+    private void animate(float fromY, float toY, AnimatorListener listener) {
+        ValueAnimator animator = ValueAnimator.ofFloat(fromY, toY);
+        animator.setInterpolator(new DecelerateInterpolator());
+        animator.setDuration(200);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float val = (Float) animation.getAnimatedValue();
+                mListFrame.scrollTo(0, (int) val);
                 checkPullingState(mListFrame.getScrollY());
             }
-        }, mIsNowPullingDown ? ScrollAnimationItem.TOP : ScrollAnimationItem.BOTTOM);
-        mPullingAnimationForClose = new ScrollAnimation();
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-            mPullingAnimationForClose.execute(item);
-        else
-            mPullingAnimationForClose.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, item);
+        });
+        animator.addListener(listener);
+        animator.start();
     }
 
     public void openHeader() {
@@ -392,32 +405,27 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
         int moveAmount = 0 - mListFrame.getScrollY();
         moveAmount = !completelyClosed ? -mHeaderHeight + moveAmount : moveAmount;
         int target = !completelyClosed ? mHeaderHeight : 0;
-
-        int orientation = ScrollAnimationItem.TOP;
-        if (mListFrame.getScrollY() < 0)
-            orientation = ScrollAnimationItem.TOP;
-        else
-            orientation = ScrollAnimationItem.BOTTOM;
-
-        ScrollAnimationItem item = new ScrollAnimationItem(mListFrame, moveAmount, target, new ScrollAnimationListener() {
+        animate(mListFrame.getScrollY(), mListFrame.getScrollY() + moveAmount, new AnimatorListener() {
             @Override
-            public void onAnimationEnd() {
+            public void onAnimationStart(Animator animation) {
 
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
                 finishedClosed(completelyClosed);
             }
 
             @Override
-            public void onProgress() {
-
+            public void onAnimationCancel(Animator animation) {
 
             }
-        }, orientation);
-        mPullingAnimationForClose = new ScrollAnimation();
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-            mPullingAnimationForClose.execute(item);
-        else
-            mPullingAnimationForClose.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, item);
 
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 
     private void finishedClosed(final boolean completelyClosed) {
@@ -429,7 +437,6 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
     }
 
     private void initializeData() {
-        mPullingAnimationForClose = null;
         mPullingIsNowClosing = false;
 
         mIsNowPullingDown = false;
@@ -584,11 +591,6 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
     private void firstTouch(MotionEvent event) {
         mNeedFirstTouch = false;
         if (mDynamicListView.reachedListTop() || mDynamicListView.reachedListBottom()) {
-            if (mPullingAnimationForClose != null) {
-                mPullingAnimationForClose.cancel(true);
-                mPullingAnimationForClose = null;
-            }
-
             mPullingScrollYPosition = mListFrame.getScrollY();
             mPullingTouchYPosition = (int) event.getRawY();
         }
@@ -691,8 +693,7 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 
     /**
      * This method is to set the sensitivity.
-     *
-     * @param The higher the number, the lot must draw.
+     * Higher the number, the lot must draw.
      */
     public void setSensitivity(int mSensitivity) {
         this.mSensitivity = mSensitivity;
@@ -704,8 +705,7 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
 
     /**
      * This method is to set the min-length for pulling.
-     *
-     * @param The higher the number, the lot must draw.
+     * Higher the number, the lot must draw.
      */
     public void setMinPullingLength(int mMinPullingLength) {
         this.mMinPullingLength = mMinPullingLength;
