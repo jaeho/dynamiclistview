@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/view_pulltorefresh_header_body"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ImageView
+            android:id="@+id/view_pulltorefresh_header_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:rotation="180"
+            android:src="@drawable/abc_ic_commit_search_api_mtrl_alpha" />
+
+        <TextView
+            android:id="@+id/view_pulltorefresh_header_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/view_pulltorefresh_header_arrow"
+            android:text="Pull to refresh" />
+    </RelativeLayout>
+    
+    <ProgressBar
+         android:id="@+id/view_pulltorefresh_header_progress"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:indeterminate="true"
+         style="@android:style/Widget.ProgressBar.Inverse"
+         android:visibility="gone"/>
+
+</LinearLayout>

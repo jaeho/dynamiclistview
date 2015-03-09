@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/Users/jaehochoe/dynamiclistview/example2/libs/library/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="app_name">DynamicListview</string>
+</resources>

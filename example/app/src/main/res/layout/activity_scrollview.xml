@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<net.jful.dynamiclistview.DynamicListLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false" >
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        layout="@layout/view_header" />
+
+    <net.jful.dynamiclistview.DynamicScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <View
+                android:layout_width="100dp"
+                android:layout_height="2048dp"
+                android:background="#770000" />
+        </LinearLayout>
+    </net.jful.dynamiclistview.DynamicScrollView>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        layout="@layout/view_footer" />
+
+</net.jful.dynamiclistview.DynamicListLayout>
