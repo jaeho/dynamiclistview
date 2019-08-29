@@ -16,8 +16,6 @@ import dev.qwqw.dlv.interfaces.DynamicListLayoutChild;
  */
 public class DynamicRecyclerView extends RecyclerView implements DynamicListLayoutChild {
 
-    protected int mOverScrollLength = 0;
-    protected boolean mIsTouchedScroll = false;
     DynamicListView.OnOverScrollListener mOnOverScrolled = null;
     private boolean mEnableBounce = true;
 

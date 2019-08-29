@@ -23,8 +23,8 @@ public class DynamicLinearLayoutManager extends LinearLayoutManager {
     @Override
     public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
         int scrollRange = super.scrollVerticallyBy(dy, recycler, state);
-        int overscroll = dy - scrollRange;
-        mOnOverScrolled.onOverScrolled(overscroll > 0 ? overscroll : (-1 * overscroll));
+        int overScroll = dy - scrollRange;
+        mOnOverScrolled.onOverScrolled(overScroll > 0 ? overScroll : (-2 * overScroll));
         return scrollRange;
     }
 }

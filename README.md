@@ -26,6 +26,22 @@ Usage
 ===============
 For using DynamicListView Functions, You should use `DynamicListLayout` first.
 
+### RecyclerView
+
+    <dev.qwqw.dlv.DynamicListLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/dynamiclistlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <dev.qwqw.dlv.DynamicRecyclerView
+            android:id="@+id/dynamiclist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </dev.qwqw.dlv.DynamicListLayout>
+
+
 ### ListView
 
     <dev.qwqw.dlv.DynamicListLayout 
@@ -129,7 +145,6 @@ If so, your ListView(or GridView, ScrollView) and [DynamicListLayout](https://gi
 Your ListView,
 
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-    	android:id="@+id/dynamiclist"
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content"/>
 
@@ -141,7 +156,6 @@ This code can be easily changed to DynamicListView like this.
         android:layout_height="match_parent" >
 
         <dev.qwqw.dlv.DynamicListView
-            android:id="@+id/dynamiclist"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
