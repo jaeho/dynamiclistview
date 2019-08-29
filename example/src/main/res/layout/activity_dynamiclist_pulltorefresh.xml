@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dev.qwqw.dlv.DynamicListLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:id="@+id/dynamiclistlayout">
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        layout="@layout/view_pulltorefresh_header" />
+
+    <dev.qwqw.dlv.DynamicListView
+        android:id="@+id/dynamiclist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:entries="@android:array/imProtocols" />
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/view_footer" />
+
+</dev.qwqw.dlv.DynamicListLayout>

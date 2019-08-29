@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="dev.qwqw.dlv.example" >
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="dev.qwqw.dlv.example.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="dev.qwqw.dlv.example.SimpleDynamicListExample" />
+        <activity android:name="dev.qwqw.dlv.example.SectionDynamicListExample" />
+        <activity android:name="dev.qwqw.dlv.example.FixedHeaderSectionDynamicListExample" />
+        <activity android:name="dev.qwqw.dlv.example.ScrollBackgroundSectionDynamicListExample" />
+        <activity android:name="dev.qwqw.dlv.example.PullToRefreshListExample" />
+        <activity android:name="dev.qwqw.dlv.example.PullToRefreshSectionListExample" />
+        <activity android:name="dev.qwqw.dlv.example.ScrollViewExample" />
+        <activity android:name="dev.qwqw.dlv.example.RecyclerViewExample" />
+    </application>
+
+</manifest>

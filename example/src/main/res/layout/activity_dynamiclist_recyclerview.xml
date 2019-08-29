@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dev.qwqw.dlv.DynamicListLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dynamiclistlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <dev.qwqw.dlv.DynamicRecyclerView
+        android:id="@+id/dynamiclist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</dev.qwqw.dlv.DynamicListLayout>
