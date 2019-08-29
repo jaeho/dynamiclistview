@@ -23,9 +23,9 @@ import net.jful.dynamiclistview.DynamicListView.OnOverScrollListener;
 
 public interface DynamicListLayoutChild {
 
-	public void setOnOverScrollListener(OnOverScrollListener onScrollDynamicListView);
-	public void setOnTouchListener(OnTouchListener onTouchListener);
-	public boolean reachedListTop();
-	public boolean reachedListBottom();
+	void setOnOverScrollListener(OnOverScrollListener onScrollDynamicListView);
+	void setOnTouchListener(OnTouchListener onTouchListener);
+	boolean reachedListTop();
+	boolean reachedListBottom();
 	
 }

@@ -90,7 +90,7 @@ public class PullToRefreshListExample extends Activity {
         protected Void doInBackground(Void... arg0) {
             // TODO Auto-generated method stub
             try {
-                new Thread().sleep(5000);
+                new Thread().sleep(2000);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

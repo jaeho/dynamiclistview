@@ -20,6 +20,6 @@ import android.view.View;
 
 public interface BaseSectionAdapter {
 
-	public void onChangedSection(View sectionView, int groupPosition, int alpha);
+	void onChangedSection(View sectionView, int groupPosition, int alpha);
 	
 }

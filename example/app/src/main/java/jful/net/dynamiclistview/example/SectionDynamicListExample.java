@@ -41,7 +41,11 @@ public class SectionDynamicListExample extends Activity {
 		Collections.addAll(contentsKor, context.getResources().getStringArray(android.R.array.phoneTypes));
 		Collections.addAll(contentsEng, context.getResources().getStringArray(android.R.array.imProtocols));
 		Collections.addAll(contentsNum, context.getResources().getStringArray(android.R.array.emailAddressTypes));
-		
+
+		Collections.addAll(contentsKor, context.getResources().getStringArray(android.R.array.phoneTypes));
+		Collections.addAll(contentsEng, context.getResources().getStringArray(android.R.array.imProtocols));
+		Collections.addAll(contentsNum, context.getResources().getStringArray(android.R.array.emailAddressTypes));
+
 		childs.add(contentsKor);
 		childs.add(contentsEng);
 		childs.add(contentsNum);

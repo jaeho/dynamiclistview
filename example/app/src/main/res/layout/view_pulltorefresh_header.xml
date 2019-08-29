@@ -17,7 +17,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:rotation="180"
-            android:src="@drawable/abc_ic_commit_search_api_mtrl_alpha" />
+            android:src="@drawable/ic_launcher" />
 
         <TextView
             android:id="@+id/view_pulltorefresh_header_tv"

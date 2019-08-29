@@ -165,7 +165,7 @@ public class DynamicListView extends ListView implements OnScrollListener, Dynam
             mNeverScrolled = false;
     }
 
-    public static interface OnOverScrollListener {
+    public interface OnOverScrollListener {
         void onOverScrolled(int overScrollY);
     }
 

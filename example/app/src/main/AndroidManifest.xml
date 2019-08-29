@@ -24,6 +24,7 @@
         <activity android:name=".PullToRefreshListExample" />
         <activity android:name=".PullToRefreshSectionListExample" />
         <activity android:name=".ScrollViewExample" />
+        <activity android:name=".RecyclerViewExample" />
     </application>
 
 </manifest>

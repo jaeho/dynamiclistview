@@ -16,9 +16,8 @@ public class MainActivity extends ListActivity {
             "PullToRefreshList",
             "SectionDynamicList",
             "PullToRefreshSectionList",
-            "FixedHeaderSectionDynamicList",
             "ScrollBackgroundSectionDynamicList",
-            "ScrollView",
+            "RecyclerView"
     };
 
     @Override

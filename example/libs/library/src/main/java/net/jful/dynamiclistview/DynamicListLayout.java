@@ -34,6 +34,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import net.jful.dynamiclistview.DynamicListScrollDependencyView.DynamicListScrollDependencyViewItem;
 import net.jful.dynamiclistview.DynamicListView.OnOverScrollListener;
 import net.jful.dynamiclistview.interfaces.DynamicListLayoutChild;
@@ -48,19 +50,19 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
     static final int DEFAULT_HEIGHT = 77;
     static final int UI_DELAY = 200;
 
-    public static enum ScrollDirection {
+    public enum ScrollDirection {
         UP, DOWN
     }
 
-    public static enum PullingStatus {
+    public enum PullingStatus {
         START, END, ON, OFF
     }
 
-    public static enum PullingMode {
+    public enum PullingMode {
         TOP, BOTTOM
     }
 
-    public static enum ListPullingResistance {
+    public enum ListPullingResistance {
         HIGH(1), LOW(2), NONE(3);
 
         private int value = 0;
@@ -180,6 +182,9 @@ public class DynamicListLayout extends FrameLayout implements OnTouchListener {
             View child = getChildAt(0);
             if (child instanceof DynamicListLayoutChild) {
                 DynamicListLayoutChild dynamicListView = (DynamicListLayoutChild) child;
+                if(child instanceof RecyclerView)
+                    mMinPullingLength = 0;
+
                 removeView((View) dynamicListView);
                 addDynamicListView(dynamicListView);
             } else if (mHeader == null) {
